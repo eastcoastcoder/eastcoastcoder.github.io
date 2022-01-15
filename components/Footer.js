@@ -3,10 +3,10 @@ import { faTwitter, faGithub, faLinkedinIn } from '@fortawesome/fontawesome-free
 import PropTypes from 'prop-types';
 
 const Footer = ({ timeout }) => (
-    <footer id="footer" style={timeout ? {display: 'none'} : {}}>
+    <footer id="footer" style={timeout ? { display: 'none' } : {}}>
         <ul className="icons">
             <li>
-                <a href="https://github.com/ethanx94">
+                <a href="https://github.com/eastcoastcoder">
                     <FontAwesomeIcon icon={faGithub} />
                 </a>
             </li>

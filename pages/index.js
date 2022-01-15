@@ -20,7 +20,7 @@ const IndexPage = () => {
         const fetchAsyncData = async () => {
             timeoutId.current = setTimeout(async () => {
                 const response = await fetch(
-                    "https://gist.githubusercontent.com/ethanx94/b130e3098fb28604339a026964e4e6c0/raw/personal-site.json"
+                    "https://gist.githubusercontent.com/eastcoastcoder/b130e3098fb28604339a026964e4e6c0/raw/personal-site.json"
                 );
                 if (response.status === 200) {
                     const responseJSON = await response.json();
