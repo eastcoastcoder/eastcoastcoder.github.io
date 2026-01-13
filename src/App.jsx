@@ -1,19 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
-import Head from 'next/head';
-import stylesheet from 'styles/main.scss';
+import '../styles/main.scss';
 
 import Header from '../components/Header';
 import Main from '../components/Main';
 import Footer from '../components/Footer';
 
-const IndexPage = () => {
+const App = () => {
   const timeoutId = useRef(null);
   const [isArticleVisible, setIsArticleVisible] = useState(false);
-  const [timeoutState, setTimeoutState] = useState(false); // This file is no longer used. The app entry point is now src/App.jsx for Vite.
+  const [timeoutState, setTimeoutState] = useState(false);
   const [articleTimeout, setArticleTimeout] = useState(false);
   const [article, setArticle] = useState('');
   const [loading, setLoading] = useState('is-loading');
-
   const [content, setContent] = useState({});
 
   useEffect(() => {
@@ -67,14 +65,7 @@ const IndexPage = () => {
   return (
     <div className={`body ${loading} ${isArticleVisible ? 'is-article-visible' : ''}`}>
       <div>
-        <Head>
-          <title>Ethan Richardson - Associate Developer</title>
-          <link
-            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,600,600i"
-            rel="stylesheet"
-          />
-        </Head>
-        <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
+        {/* Head tags should be added in index.html for Vite */}
         <div id="wrapper">
           <Header
             onOpenArticle={handleOpenArticle}
@@ -96,4 +87,4 @@ const IndexPage = () => {
   );
 };
 
-export default IndexPage;
+export default App;
