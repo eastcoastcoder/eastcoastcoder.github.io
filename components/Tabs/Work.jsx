@@ -9,7 +9,7 @@ const Work = ({ onCloseArticle, article, articleTimeout, work }) => (
     {work &&
       work.map(({ yearStart, yearEnd, name, positions, description }, idx) => (
         <div
-          className="col-md-6 w-grid"
+          className="w-grid"
           key={`${idx}-work-item`}>
           <div className="work-grid">
             <h2>

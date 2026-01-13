@@ -21,7 +21,7 @@ const Skills = ({ onCloseArticle, article, articleTimeout, edu }) => (
       edu.map(({ name, yearStart, yearEnd, degrees, location }) => (
         <div
           key={name}
-          className="col-md-6 edu-grid">
+          className="edu-grid">
           <div className="edu-border">
             <div className="edu-grid-master">
               <h2>
