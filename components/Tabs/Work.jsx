@@ -20,7 +20,13 @@ const Work = ({ onCloseArticle, article, articleTimeout, work }) => (
               {positions.map(position => (
                 <h5 key={position}>{position}</h5>
               ))}
-              <p>{description}</p>
+              <p>
+                <ul>
+                  {description.split('\n').map((d, idx) => (
+                    <li key={`${idx}-description`}>{d}</li>
+                  ))}
+                </ul>
+              </p>
             </div>
           </div>
         </div>

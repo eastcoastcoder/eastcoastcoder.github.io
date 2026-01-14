@@ -5,7 +5,7 @@ const Header = ({ onOpenArticle, timeout }) => (
     <div className="logo">
       <img
         className="logo"
-        src="/static/images/1.png"
+        src="/static/images/2.jpeg"
         alt=""
       />
     </div>
