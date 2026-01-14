@@ -5,7 +5,7 @@
   "homepage": "https://eastcoastcoder.github.io",
   "scripts": {
     "dev": "bun --bun next dev",
-    "build": "bun --bun next build",
+    "build": "bun --bun next build && cp -r out/* docs/ && touch docs/.nojekyll",
     "start": "bun --bun next start",
     "predeploy": "bun run build",
     "deploy": "gh-pages -d docs",
