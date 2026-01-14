@@ -9,7 +9,9 @@
     "start": "bun --bun next start",
     "predeploy": "bun run build",
     "deploy": "gh-pages -d docs",
-    "lint": "next lint"
+    "lint": "next lint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +25,20 @@
     "sass": "^1.97.2"
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0"
+    "@chromatic-com/storybook": "^5.0.0",
+    "@storybook/addon-a11y": "^10.1.11",
+    "@storybook/addon-docs": "^10.1.11",
+    "@storybook/addon-vitest": "^10.1.11",
+    "@storybook/nextjs-vite": "^10.1.11",
+    "@storybook/react": "^10.1.11",
+    "@storybook/react-webpack5": "^10.1.11",
+    "@vitest/browser-playwright": "^4.0.17",
+    "@vitest/coverage-v8": "^4.0.17",
+    "gh-pages": "^6.3.0",
+    "playwright": "^1.57.0",
+    "prop-types": "^15.8.1",
+    "storybook": "^10.1.11",
+    "vite": "^7.3.1",
+    "vitest": "^4.0.17"
   }
 }

@@ -47,3 +47,5 @@ out/
 docs/
 build/
 dist/
+*storybook.log
+storybook-static

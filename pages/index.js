@@ -89,110 +89,114 @@ export default function IndexPage() {
           <div
             id="main"
             style={timeoutState ? { display: 'flex' } : { display: 'none' }}>
-            <Article
-              id="intro"
-              article={article}
-              articleTimeout={articleTimeout}
-              onCloseArticle={handleCloseArticle}
-              title="Intro">
-              <p>{content.about}</p>
-            </Article>
+            {article === 'intro' && (
+              <Article
+                id="intro"
+                articleTimeout={articleTimeout}
+                onCloseArticle={handleCloseArticle}
+                title="Intro">
+                <p>{content.about}</p>
+              </Article>
+            )}
 
-            <Article
-              id="work"
-              article={article}
-              articleTimeout={articleTimeout}
-              onCloseArticle={handleCloseArticle}
-              title="Work">
-              {content.work?.map(({ yearStart, yearEnd, name, positions, description }, idx) => (
-                <div
-                  className="w-grid"
-                  key={`work-${idx}`}>
-                  <div className="work-grid">
-                    <h2>
-                      {yearStart} - {yearEnd || 'Current'}
-                    </h2>
-                    <div className="work-grid-info">
-                      <h3>{name}</h3>
-                      {positions.map((position, posIdx) => (
-                        <h5 key={`${idx}-position-${posIdx}`}>{position}</h5>
-                      ))}
-                      <ul>
-                        {description.split('\n').map((item, descIdx) => (
-                          <li key={`${idx}-desc-${descIdx}`}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </Article>
-
-            <Article
-              id="skills"
-              article={article}
-              articleTimeout={articleTimeout}
-              onCloseArticle={handleCloseArticle}
-              title="Skills">
-              <p>
-                I specialize in writing React and React Native web and mobile applications. Here are just a few
-                programming languages I am also familiar with:
-              </p>
-              <ul>
-                <li>JavaScript</li>
-                <li>C# / .Net</li>
-                <li>Python</li>
-                <li>SQL</li>
-              </ul>
-              <h2 className="major">Education</h2>
-              {content.edu?.map(({ name, yearStart, yearEnd, degrees, location }, idx) => (
-                <div
-                  key={`edu-${name}-${idx}`}
-                  className="edu-grid">
-                  <div className="edu-border">
-                    <div className="edu-grid-master">
+            {article === 'work' && (
+              <Article
+                id="work"
+                articleTimeout={articleTimeout}
+                onCloseArticle={handleCloseArticle}
+                title="Work">
+                {content.work?.map(({ yearStart, yearEnd, name, positions, description }, idx) => (
+                  <div
+                    className="w-grid"
+                    key={`work-${idx}`}>
+                    <div className="work-grid">
                       <h2>
-                        {yearStart} - {yearEnd}
+                        {yearStart} - {yearEnd || 'Current'}
                       </h2>
-                      <h3>
-                        {name} {location}
-                      </h3>
-                      {degrees.map((degree, degIdx) => (
-                        <h5 key={`${idx}-degree-${degIdx}`}>{degree}</h5>
-                      ))}
+                      <div className="work-grid-info">
+                        <h3>{name}</h3>
+                        {positions.map((position, posIdx) => (
+                          <h5 key={`${idx}-position-${posIdx}`}>{position}</h5>
+                        ))}
+                        <ul>
+                          {description.split('\n').map((item, descIdx) => (
+                            <li key={`${idx}-desc-${descIdx}`}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </Article>
+                ))}
+              </Article>
+            )}
 
-            <Article
-              id="contact"
-              article={article}
-              articleTimeout={articleTimeout}
-              onCloseArticle={handleCloseArticle}
-              title="Contact">
-              <div className="field">
+            {article === 'skills' && (
+              <Article
+                id="skills"
+                articleTimeout={articleTimeout}
+                onCloseArticle={handleCloseArticle}
+                title="Skills">
                 <p>
-                  Further contact information can be found on my resume:{' '}
-                  <a
-                    href="https://goo.gl/sKcNiQ"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    View Resume
-                  </a>
+                  I specialize in writing React and React Native web and mobile applications. Here are just a few
+                  programming languages I am also familiar with:
                 </p>
-                <p>
-                  You may also feel free to contact me directly via LinkedIn:{' '}
-                  <a
-                    href="https://linkedin.com/in/ethan-richardson-854214b5"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    View LinkedIn
-                  </a>
-                </p>
-              </div>
-            </Article>
+                <ul>
+                  <li>JavaScript</li>
+                  <li>C# / .Net</li>
+                  <li>Python</li>
+                  <li>SQL</li>
+                </ul>
+                <h2 className="major">Education</h2>
+                {content.edu?.map(({ name, yearStart, yearEnd, degrees, location }, idx) => (
+                  <div
+                    key={`edu-${name}-${idx}`}
+                    className="edu-grid">
+                    <div className="edu-border">
+                      <div className="edu-grid-master">
+                        <h2>
+                          {yearStart} - {yearEnd}
+                        </h2>
+                        <h3>
+                          {name} {location}
+                        </h3>
+                        {degrees.map((degree, degIdx) => (
+                          <h5 key={`${idx}-degree-${degIdx}`}>{degree}</h5>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </Article>
+            )}
+
+            {article === 'contact' && (
+              <Article
+                id="contact"
+                articleTimeout={articleTimeout}
+                onCloseArticle={handleCloseArticle}
+                title="Contact">
+                <div className="field">
+                  <p>
+                    Further contact information can be found on my resume:{' '}
+                    <a
+                      href="https://goo.gl/sKcNiQ"
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      View Resume
+                    </a>
+                  </p>
+                  <p>
+                    You may also feel free to contact me directly via LinkedIn:{' '}
+                    <a
+                      href="https://linkedin.com/in/ethan-richardson-854214b5"
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      View LinkedIn
+                    </a>
+                  </p>
+                </div>
+              </Article>
+            )}
           </div>
           <Footer timeout={timeoutState} />
         </div>
