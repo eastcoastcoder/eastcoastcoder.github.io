@@ -39,8 +39,11 @@ Thumbs.db
 node_modules/*
 www/*
 .parcel-cache
+bun.lockb
 
 .next
 .vscode
 out/
 docs/
+build/
+dist/
