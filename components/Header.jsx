@@ -12,7 +12,7 @@ const Header = ({ onOpenArticle, timeout }) => (
     <div className="content">
       <div className="inner">
         <h1>Ethan Richardson</h1>
-        <p>Associate Software Developer based in Myrtle Beach, South Carolina</p>
+        <p>Lead Associate Systems Engineer based in Myrtle Beach, South Carolina</p>
       </div>
     </div>
     <nav>

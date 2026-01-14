@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import '../styles/main.scss';
 
 import Header from '../components/Header';
-import Main from '../components/Main';
+import Article from '../components/Article';
 import Footer from '../components/Footer';
 
 const App = () => {
@@ -37,30 +37,43 @@ const App = () => {
   }, []);
 
   const handleOpenArticle = articleLocal => {
-    setIsArticleVisible(!isArticleVisible);
+    setIsArticleVisible(prev => !prev);
     setArticle(articleLocal);
 
     setTimeout(() => {
-      setTimeoutState(!timeoutState);
+      setTimeoutState(prev => !prev);
     }, 325);
 
     setTimeout(() => {
-      setArticleTimeout(!articleTimeout);
+      setArticleTimeout(prev => !prev);
     }, 350);
   };
 
   const handleCloseArticle = () => {
-    setArticleTimeout(!articleTimeout);
+    setArticleTimeout(prev => !prev);
 
     setTimeout(() => {
-      setTimeoutState(!timeoutState);
+      setTimeoutState(prev => !prev);
     }, 325);
 
     setTimeout(() => {
-      setIsArticleVisible(!isArticleVisible);
+      setIsArticleVisible(prev => !prev);
       setArticle('');
     }, 350);
   };
+
+  useEffect(() => {
+    const handleEscKey = event => {
+      if (event.key === 'Escape' && isArticleVisible) {
+        handleCloseArticle();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscKey);
+    return () => {
+      window.removeEventListener('keydown', handleEscKey);
+    };
+  }, [isArticleVisible, articleTimeout, timeoutState]);
 
   return (
     <div className={`body ${loading} ${isArticleVisible ? 'is-article-visible' : ''}`}>
@@ -71,14 +84,105 @@ const App = () => {
             onOpenArticle={handleOpenArticle}
             timeout={timeoutState}
           />
-          <Main
-            isArticleVisible={isArticleVisible}
-            timeout={timeoutState}
-            articleTimeout={articleTimeout}
-            article={article}
-            onCloseArticle={handleCloseArticle}
-            content={content}
-          />
+          <div
+            id="main"
+            style={timeoutState ? { display: 'flex' } : { display: 'none' }}>
+            <Article
+              id="intro"
+              article={article}
+              articleTimeout={articleTimeout}
+              onCloseArticle={handleCloseArticle}
+              title="Intro">
+              <p>{content.about}</p>
+            </Article>
+
+            <Article
+              id="work"
+              article={article}
+              articleTimeout={articleTimeout}
+              onCloseArticle={handleCloseArticle}
+              title="Work">
+              {content.work &&
+                content.work.map(({ yearStart, yearEnd, name, positions, description }, idx) => (
+                  <div
+                    className="w-grid"
+                    key={`${idx}-work-item`}>
+                    <div className="work-grid">
+                      <h2>
+                        {yearStart} - {yearEnd ? yearEnd : 'Current'}
+                      </h2>
+                      <div className="work-grid-info">
+                        <h3>{name}</h3>
+                        {positions.map(position => (
+                          <h5 key={position}>{position}</h5>
+                        ))}
+                        <ul>
+                          {description.split('\n').map((d, idx) => (
+                            <li key={`${idx}-description`}>{d}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </Article>
+
+            <Article
+              id="skills"
+              article={article}
+              articleTimeout={articleTimeout}
+              onCloseArticle={handleCloseArticle}
+              title="Skills">
+              <p>
+                I specialize in writing React and React Native web and mobile applications. Here are just a few
+                programming languages I am also familiar with:
+              </p>
+              <ul>
+                <li>JavaScript</li>
+                <li>C# / .Net</li>
+                <li>Python</li>
+                <li>SQL</li>
+              </ul>
+              <h2 className="major">Education</h2>
+              {content.edu &&
+                content.edu.map(({ name, yearStart, yearEnd, degrees, location }) => (
+                  <div
+                    key={name}
+                    className="edu-grid">
+                    <div className="edu-border">
+                      <div className="edu-grid-master">
+                        <h2>
+                          {yearStart} - {yearEnd}
+                        </h2>
+                        <h3>
+                          {name} {location}{' '}
+                        </h3>
+                        {degrees.map(degree => (
+                          <h5 key={degree}>{degree}</h5>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </Article>
+
+            <Article
+              id="contact"
+              article={article}
+              articleTimeout={articleTimeout}
+              onCloseArticle={handleCloseArticle}
+              title="Contact">
+              <div className="field">
+                <p>
+                  Further contact information can be found on my resume: <a href="https://goo.gl/sKcNiQ">View Resume</a>
+                </p>
+                <p>
+                  You may also feel free to contact me directly via LinkedIn:{' '}
+                  <a href="https://linkedin.com/in/ethan-richardson-854214b5">View LinkedIn</a>
+                </p>
+              </div>
+            </Article>
+          </div>
           <Footer timeout={timeoutState} />
         </div>
         <div id="bg" />
