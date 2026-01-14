@@ -6,7 +6,7 @@
   "homepage": "https://eastcoastcoder.github.io",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d docs",
     "dev": "vite",
     "build": "vite build && npm run postbuild",
     "postbuild": "mkdir -p docs/static/images && cp -R static/images/* docs/static/images/ || true",
