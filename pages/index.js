@@ -1,11 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
 
 import Header from '../components/Header';
 import Article from '../components/Article';
 import Footer from '../components/Footer';
 
-const IndexPage = () => {
+const ANIMATION_DELAY = 325;
+const ANIMATION_TIMEOUT = 350;
+const DATA_LOAD_DELAY = 100;
+
+export default function IndexPage() {
   const timeoutId = useRef(null);
   const [isArticleVisible, setIsArticleVisible] = useState(false);
   const [timeoutState, setTimeoutState] = useState(false);
@@ -15,20 +19,22 @@ const IndexPage = () => {
   const [content, setContent] = useState({});
 
   useEffect(() => {
-    const fetchAsyncData = async () => {
-      timeoutId.current = setTimeout(async () => {
+    timeoutId.current = setTimeout(async () => {
+      try {
         const response = await fetch(
           'https://gist.githubusercontent.com/eastcoastcoder/b130e3098fb28604339a026964e4e6c0/raw/personal-site.json'
         );
-        if (response.status === 200) {
-          const responseJSON = await response.json();
-          setContent(responseJSON);
+        if (response.ok) {
+          const data = await response.json();
+          setContent(data);
         }
+      } catch (error) {
+        console.error('Failed to fetch content:', error);
+      } finally {
         setLoading('');
-      }, 100);
-    };
+      }
+    }, DATA_LOAD_DELAY);
 
-    fetchAsyncData();
     return () => {
       if (timeoutId.current) {
         clearTimeout(timeoutId.current);
@@ -36,31 +42,23 @@ const IndexPage = () => {
     };
   }, []);
 
-  const handleOpenArticle = articleLocal => {
-    setIsArticleVisible(prev => !prev);
+  const handleOpenArticle = useCallback(articleLocal => {
+    setIsArticleVisible(true);
     setArticle(articleLocal);
 
-    setTimeout(() => {
-      setTimeoutState(prev => !prev);
-    }, 325);
+    setTimeout(() => setTimeoutState(true), ANIMATION_DELAY);
+    setTimeout(() => setArticleTimeout(true), ANIMATION_TIMEOUT);
+  }, []);
 
-    setTimeout(() => {
-      setArticleTimeout(prev => !prev);
-    }, 350);
-  };
+  const handleCloseArticle = useCallback(() => {
+    setArticleTimeout(false);
 
-  const handleCloseArticle = () => {
-    setArticleTimeout(prev => !prev);
-
+    setTimeout(() => setTimeoutState(false), ANIMATION_DELAY);
     setTimeout(() => {
-      setTimeoutState(prev => !prev);
-    }, 325);
-
-    setTimeout(() => {
-      setIsArticleVisible(prev => !prev);
+      setIsArticleVisible(false);
       setArticle('');
-    }, 350);
-  };
+    }, ANIMATION_TIMEOUT);
+  }, []);
 
   useEffect(() => {
     const handleEscKey = event => {
@@ -70,10 +68,8 @@ const IndexPage = () => {
     };
 
     window.addEventListener('keydown', handleEscKey);
-    return () => {
-      window.removeEventListener('keydown', handleEscKey);
-    };
-  }, [isArticleVisible, articleTimeout, timeoutState]);
+    return () => window.removeEventListener('keydown', handleEscKey);
+  }, [isArticleVisible, handleCloseArticle]);
 
   return (
     <div className={`body ${loading} ${isArticleVisible ? 'is-article-visible' : ''}`}>
@@ -108,29 +104,28 @@ const IndexPage = () => {
               articleTimeout={articleTimeout}
               onCloseArticle={handleCloseArticle}
               title="Work">
-              {content.work &&
-                content.work.map(({ yearStart, yearEnd, name, positions, description }, idx) => (
-                  <div
-                    className="w-grid"
-                    key={`${idx}-work-item`}>
-                    <div className="work-grid">
-                      <h2>
-                        {yearStart} - {yearEnd ? yearEnd : 'Current'}
-                      </h2>
-                      <div className="work-grid-info">
-                        <h3>{name}</h3>
-                        {positions.map(position => (
-                          <h5 key={position}>{position}</h5>
+              {content.work?.map(({ yearStart, yearEnd, name, positions, description }, idx) => (
+                <div
+                  className="w-grid"
+                  key={`work-${idx}`}>
+                  <div className="work-grid">
+                    <h2>
+                      {yearStart} - {yearEnd || 'Current'}
+                    </h2>
+                    <div className="work-grid-info">
+                      <h3>{name}</h3>
+                      {positions.map((position, posIdx) => (
+                        <h5 key={`${idx}-position-${posIdx}`}>{position}</h5>
+                      ))}
+                      <ul>
+                        {description.split('\n').map((item, descIdx) => (
+                          <li key={`${idx}-desc-${descIdx}`}>{item}</li>
                         ))}
-                        <ul>
-                          {description.split('\n').map((d, idx) => (
-                            <li key={`${idx}-description`}>{d}</li>
-                          ))}
-                        </ul>
-                      </div>
+                      </ul>
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
             </Article>
 
             <Article
@@ -150,26 +145,25 @@ const IndexPage = () => {
                 <li>SQL</li>
               </ul>
               <h2 className="major">Education</h2>
-              {content.edu &&
-                content.edu.map(({ name, yearStart, yearEnd, degrees, location }) => (
-                  <div
-                    key={name}
-                    className="edu-grid">
-                    <div className="edu-border">
-                      <div className="edu-grid-master">
-                        <h2>
-                          {yearStart} - {yearEnd}
-                        </h2>
-                        <h3>
-                          {name} {location}{' '}
-                        </h3>
-                        {degrees.map(degree => (
-                          <h5 key={degree}>{degree}</h5>
-                        ))}
-                      </div>
+              {content.edu?.map(({ name, yearStart, yearEnd, degrees, location }, idx) => (
+                <div
+                  key={`edu-${name}-${idx}`}
+                  className="edu-grid">
+                  <div className="edu-border">
+                    <div className="edu-grid-master">
+                      <h2>
+                        {yearStart} - {yearEnd}
+                      </h2>
+                      <h3>
+                        {name} {location}
+                      </h3>
+                      {degrees.map((degree, degIdx) => (
+                        <h5 key={`${idx}-degree-${degIdx}`}>{degree}</h5>
+                      ))}
                     </div>
                   </div>
-                ))}
+                </div>
+              ))}
             </Article>
 
             <Article
@@ -180,11 +174,22 @@ const IndexPage = () => {
               title="Contact">
               <div className="field">
                 <p>
-                  Further contact information can be found on my resume: <a href="https://goo.gl/sKcNiQ">View Resume</a>
+                  Further contact information can be found on my resume:{' '}
+                  <a
+                    href="https://goo.gl/sKcNiQ"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    View Resume
+                  </a>
                 </p>
                 <p>
                   You may also feel free to contact me directly via LinkedIn:{' '}
-                  <a href="https://linkedin.com/in/ethan-richardson-854214b5">View LinkedIn</a>
+                  <a
+                    href="https://linkedin.com/in/ethan-richardson-854214b5"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    View LinkedIn
+                  </a>
                 </p>
               </div>
             </Article>
@@ -195,6 +200,4 @@ const IndexPage = () => {
       </div>
     </div>
   );
-};
-
-export default IndexPage;
+}
