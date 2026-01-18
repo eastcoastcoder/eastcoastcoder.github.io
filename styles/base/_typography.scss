@@ -42,7 +42,6 @@ a {
       'border-bottom-color #{_duration(transition)} ease-in-out'
     )
   );
-  border-bottom: dotted 1px _palette(fg-light);
   text-decoration: none;
   color: inherit;
 
